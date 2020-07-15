@@ -1,23 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [items, setItems] = useState([]);
+  fetch("https://u120p3poi0.execute-api.ap-northeast-2.amazonaws.com/dev/test")
+    .then((response) => response.json())
+    .then((response) => {
+      setItems(response);
+    });
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ul>
+          {items.map((item) => (
+            <li key={item.id}>{item.name}</li>
+          ))}
+        </ul>
       </header>
     </div>
   );
