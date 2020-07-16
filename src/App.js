@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
+import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Form from "./component/Form";
+import List from "./component/List";
 
 function App() {
-  const [items, setItems] = useState([]);
-  fetch("https://u120p3poi0.execute-api.ap-northeast-2.amazonaws.com/dev/test")
-    .then((response) => response.json())
-    .then((response) => {
-      setItems(response);
-    });
-
   return (
     <div className="App">
       <header className="App-header">
-        <ul>
-          {items.map((item) => (
-            <li key={item.id}>{item.name}</li>
-          ))}
-        </ul>
+        <Router>
+          <Route path="/" component={List} />
+          <Route path="/add" component={Form} />
+          <Link to="/">Main</Link>
+          <Link to="/add">Add Branch</Link>
+        </Router>
       </header>
     </div>
   );
