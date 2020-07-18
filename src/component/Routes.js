@@ -6,6 +6,6 @@ import List from "./List";
 export default () => (
   <Router>
     <Route path="/add" component={Form} />
-    <Route path="/" component={List} />
+    <Route path="/" exact component={List} />
   </Router>
 );

@@ -1,21 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import DaumPostcode from "react-daum-postcode";
-import Modal from "react-modal";
 import axios from "axios";
+import FormData from "form-data";
 
 function Form() {
-  var subtitle;
   const { register, handleSubmit, setValue } = useForm();
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -38,6 +28,12 @@ function Form() {
   };
 
   const send = (data) => {
+    // const formData = new FormData();
+    // formData.append("name", data.name);
+    // formData.append("address", data.address);
+    // formData.append("detail_address", data.detail_address);
+    // formData.append("image", data.image[0]);
+
     axios
       .post(
         "https://u120p3poi0.execute-api.ap-northeast-2.amazonaws.com/dev/test",
@@ -45,6 +41,13 @@ function Form() {
           name: data.name,
           address: data.address,
           detail_address: data.detail_address,
+          image: data.image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       )
       .then(() => {
@@ -55,7 +58,7 @@ function Form() {
       });
   };
   return (
-    <form onSubmit={handleSubmit(send)}>
+    <form onSubmit={handleSubmit(send)} encType="multipart/form-data">
       <label>
         Name:
         <input type="text" name="name" ref={register} />
@@ -76,6 +79,16 @@ function Form() {
       <label>
         Detail_Address:
         <input type="text" name="detail_address" ref={register} />
+      </label>
+      <br />
+      <label>
+        Image:
+        <input
+          type="file"
+          accept=".jpg, .png, .jpeg"
+          name="image"
+          ref={register}
+        />
       </label>
       <br />
       <input type="submit" />
